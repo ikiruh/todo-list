@@ -41,6 +41,10 @@ func nextDayHandler(w http.ResponseWriter, r *http.Request) {
 
 func taskHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
+	case http.MethodGet:
+		getTaskHandler(w, r)
+	case http.MethodPut:
+		updateTaskHandler(w, r)
 	case http.MethodPost:
 		addTaskHandler(w, r)
 	default:
