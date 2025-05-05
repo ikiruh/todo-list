@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/ikiruh/go_final_project/pkg/db"
 )
@@ -41,6 +42,27 @@ func updateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := db.UpdateTask(&task); err != nil {
+		writeJSONError(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	writeJSON(w, struct{}{}, http.StatusOK)
+}
+
+func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
+	idStr := r.URL.Query().Get("id")
+	if idStr == "" {
+		writeJSONError(w, "task ID is not specified", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		writeJSONError(w, "invalid task id", http.StatusBadRequest)
+		return
+	}
+
+	if err := db.DeleteTask(id); err != nil {
 		writeJSONError(w, err.Error(), http.StatusNotFound)
 		return
 	}
