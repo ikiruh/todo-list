@@ -10,6 +10,7 @@ const LayoutDate = "20060102"
 
 func Init() {
 	http.HandleFunc("/api/nextdate", nextDayHandler)
+	http.HandleFunc("/api/task", taskHandler)
 }
 
 func nextDayHandler(w http.ResponseWriter, r *http.Request) {
@@ -35,4 +36,13 @@ func nextDayHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprint(w, result)
+}
+
+func taskHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		addTaskHandler(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
 }

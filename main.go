@@ -19,6 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error during database initialization: ", err)
 	}
+	defer db.Close()
 
 	server.StartServer()
 }
